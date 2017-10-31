@@ -11,12 +11,20 @@
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<elasticsearch.version>5.6.1</elasticsearch.version>
+		<kuromoji.version>5.4.1-20160218</kuromoji.version>
 		<dl4j.version>0.9.1</dl4j.version>
 		<nd4j.version>0.9.1</nd4j.version>
 		<logback.version>1.2.3</logback.version>
 		<slf4j.version>1.7.25</slf4j.version>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>codelibs.org</id>
+			<name>CodeLibs Repository</name>
+			<url>http://maven.codelibs.org/</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -26,12 +34,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- <dependency> <groupId>com.atilika.kuromoji</groupId> <artifactId>kuromoji-ipadic</artifactId>
-			<version>${kuromoji.version}</version> </dependency> -->
 		<dependency>
 			<groupId>org.codelibs</groupId>
-			<artifactId>elasticsearch-analysis-kuromoji-neologd</artifactId>
-			<version>${elasticsearch.version}</version>
+			<artifactId>lucene-analyzers-kuromoji-ipadic-neologd</artifactId>
+			<version>${kuromoji.version}</version>
+			<!-- http://maven.codelibs.org/org/codelibs/lucene-analyzers-kuromoji-ipadic-neologd/ -->
 		</dependency>
 
 		<dependency>

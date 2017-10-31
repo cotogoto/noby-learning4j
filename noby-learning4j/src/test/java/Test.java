@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.util.CharArraySet;
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseAnalyzer;
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseTokenizer;
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseTokenizer.Mode;
@@ -15,34 +15,34 @@ import org.codelibs.neologd.ipadic.lucene.analysis.ja.dict.UserDictionary;
 
 public class Test {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
 
-        String src = "今日はいい天気ですね。";
-        List <String> list = tokenize(src);
+        final String src = "今日はいい天気ですね。";
+        final List <String> list = Test.tokenize(src);
         System.out.println(list);
     }
 
 
-    private static List <String> tokenize(Reader reader) {
+    private static List <String> tokenize(final Reader reader) {
 
-        List <String> ret = new ArrayList <>();
+        final List <String> ret = new ArrayList <>();
 
-        UserDictionary userDict = null;
-        Mode mode = JapaneseTokenizer.Mode.NORMAL;
-        CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
-        Set <String> stopTags = JapaneseAnalyzer.getDefaultStopTags();
+        final UserDictionary userDict = null;
+        final Mode mode = JapaneseTokenizer.Mode.NORMAL;
+        final CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
+        final Set <String> stopTags = JapaneseAnalyzer.getDefaultStopTags();
 
         try (JapaneseAnalyzer analyzer = new JapaneseAnalyzer(userDict, mode, stopSet, stopTags);
                 TokenStream tokenStream = analyzer.tokenStream("", reader)) {
 
             // BaseFormAttribute baseAttr = tokenStream.addAttribute(BaseFormAttribute.class);
-            CharTermAttribute charAttr = tokenStream.addAttribute(CharTermAttribute.class);
+            final CharTermAttribute charAttr = tokenStream.addAttribute(CharTermAttribute.class);
             // PartOfSpeechAttribute posAttr = tokenStream.addAttribute(PartOfSpeechAttribute.class);
             // ReadingAttribute readAttr = tokenStream.addAttribute(ReadingAttribute.class);
 
             tokenStream.reset();
             while (tokenStream.incrementToken()) {
-                String text = charAttr.toString(); // 単語
+                final String text = charAttr.toString(); // 単語
                 // String baseForm = baseAttr.getBaseForm(); // 原型
                 // String reading = readAttr.getReading(); // 読み
                 // String partOfSpeech = posAttr.getPartOfSpeech(); // 品詞
@@ -50,7 +50,7 @@ public class Test {
                 // System.out.println(text + "\t|\t" + baseForm + "\t|\t" + reading + "\t|\t" + partOfSpeech);
                 ret.add(text);
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
@@ -58,8 +58,8 @@ public class Test {
     }
 
 
-    private static List <String> tokenize(String src) {
+    private static List <String> tokenize(final String src) {
 
-        return tokenize(new StringReader(src));
+        return Test.tokenize(new StringReader(src));
     }
 }

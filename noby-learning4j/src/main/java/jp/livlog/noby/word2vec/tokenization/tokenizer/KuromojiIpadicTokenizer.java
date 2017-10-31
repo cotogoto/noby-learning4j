@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.util.CharArraySet;
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseAnalyzer;
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseTokenizer;
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseTokenizer.Mode;
@@ -19,32 +19,73 @@ import org.deeplearning4j.text.tokenization.tokenizer.Tokenizer;
 
 public class KuromojiIpadicTokenizer implements Tokenizer {
 
+    private static List <String> tokenize(final Reader reader) {
+
+        final List <String> ret = new ArrayList <>();
+
+        final UserDictionary userDict = null;
+        final Mode mode = JapaneseTokenizer.Mode.NORMAL;
+        final CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
+        final Set <String> stopTags = JapaneseAnalyzer.getDefaultStopTags();
+
+        try (JapaneseAnalyzer analyzer = new JapaneseAnalyzer(userDict, mode, stopSet, stopTags);
+                TokenStream tokenStream = analyzer.tokenStream("", reader)) {
+
+            // BaseFormAttribute baseAttr = tokenStream.addAttribute(BaseFormAttribute.class);
+            final CharTermAttribute charAttr = tokenStream.addAttribute(CharTermAttribute.class);
+            // PartOfSpeechAttribute posAttr = tokenStream.addAttribute(PartOfSpeechAttribute.class);
+            // ReadingAttribute readAttr = tokenStream.addAttribute(ReadingAttribute.class);
+
+            tokenStream.reset();
+            while (tokenStream.incrementToken()) {
+                final String text = charAttr.toString(); // 単語
+                // String baseForm = baseAttr.getBaseForm(); // 原型
+                // String reading = readAttr.getReading(); // 読み
+                // String partOfSpeech = posAttr.getPartOfSpeech(); // 品詞
+
+                // System.out.println(text + "\t|\t" + baseForm + "\t|\t" + reading + "\t|\t" + partOfSpeech);
+                ret.add(text);
+            }
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    private static List <String> tokenize(final String src) {
+
+        return KuromojiIpadicTokenizer.tokenize(new StringReader(src));
+    }
+
     private List <String>   tokens = null;
 
+
     private int             index;
+
 
     private TokenPreProcess preProcess;
 
 
-    public KuromojiIpadicTokenizer(String toTokenize) {
+    public KuromojiIpadicTokenizer(final String toTokenize) {
 
-        tokens = tokenize(toTokenize);
+        this.tokens = KuromojiIpadicTokenizer.tokenize(toTokenize);
     }
 
 
     @Override
     public int countTokens() {
 
-        return tokens.size();
+        return this.tokens.size();
     }
 
 
     @Override
     public List <String> getTokens() {
 
-        List <String> ret = new ArrayList <String>();
-        while (hasMoreTokens()) {
-            ret.add(nextToken());
+        final List <String> ret = new ArrayList <>();
+        while (this.hasMoreTokens()) {
+            ret.add(this.nextToken());
         }
         return ret;
     }
@@ -53,23 +94,25 @@ public class KuromojiIpadicTokenizer implements Tokenizer {
     @Override
     public boolean hasMoreTokens() {
 
-        if (index < 0)
+        if (this.index < 0) {
             return false;
-        else
-            return index < tokens.size();
+        } else {
+            return this.index < this.tokens.size();
+        }
     }
 
 
     @Override
     public String nextToken() {
 
-        if (index < 0)
+        if (this.index < 0) {
             return null;
+        }
 
-        String tok = tokens.get(index);
-        index++;
-        if (preProcess != null) {
-            return preProcess.preProcess(tok);
+        final String tok = this.tokens.get(this.index);
+        this.index++;
+        if (this.preProcess != null) {
+            return this.preProcess.preProcess(tok);
         } else {
             return tok;
         }
@@ -77,49 +120,8 @@ public class KuromojiIpadicTokenizer implements Tokenizer {
 
 
     @Override
-    public void setTokenPreProcessor(TokenPreProcess preProcess) {
+    public void setTokenPreProcessor(final TokenPreProcess preProcess) {
 
         this.preProcess = preProcess;
-    }
-
-
-    private static List <String> tokenize(Reader reader) {
-
-        List <String> ret = new ArrayList <>();
-
-        UserDictionary userDict = null;
-        Mode mode = JapaneseTokenizer.Mode.NORMAL;
-        CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
-        Set <String> stopTags = JapaneseAnalyzer.getDefaultStopTags();
-
-        try (JapaneseAnalyzer analyzer = new JapaneseAnalyzer(userDict, mode, stopSet, stopTags);
-                TokenStream tokenStream = analyzer.tokenStream("", reader)) {
-
-            // BaseFormAttribute baseAttr = tokenStream.addAttribute(BaseFormAttribute.class);
-            CharTermAttribute charAttr = tokenStream.addAttribute(CharTermAttribute.class);
-            // PartOfSpeechAttribute posAttr = tokenStream.addAttribute(PartOfSpeechAttribute.class);
-            // ReadingAttribute readAttr = tokenStream.addAttribute(ReadingAttribute.class);
-
-            tokenStream.reset();
-            while (tokenStream.incrementToken()) {
-                String text = charAttr.toString(); // 単語
-                // String baseForm = baseAttr.getBaseForm(); // 原型
-                // String reading = readAttr.getReading(); // 読み
-                // String partOfSpeech = posAttr.getPartOfSpeech(); // 品詞
-
-                // System.out.println(text + "\t|\t" + baseForm + "\t|\t" + reading + "\t|\t" + partOfSpeech);
-                ret.add(text);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return ret;
-    }
-
-
-    private static List <String> tokenize(String src) {
-
-        return tokenize(new StringReader(src));
     }
 }

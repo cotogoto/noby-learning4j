@@ -16,10 +16,10 @@ public class Word2VecPredictCmd {
 
         final Collection <String> lst = vec.wordsNearest("男", 10);
         System.out.println(lst);
-        final double cosSim = vec.similarity("男", "蛇");
+        final double cosSim = vec.similarity("男", "女");
         System.out.println(cosSim);
-        // final double[] wordVector = vec.getWordVector("男");
-        // System.out.println(wordVector);
+        final double[] wordVector = vec.getWordVector("男");
+        System.out.println(wordVector);
     }
 
 }
