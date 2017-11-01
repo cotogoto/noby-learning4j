@@ -1,16 +1,14 @@
 package jp.livlog.noby.word2vec;
 
-
 import java.io.File;
 import java.util.Collection;
 
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 
-
 public class Word2VecPredictCmd {
 
-    public static void main (final String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
 
         final WordVectors vec = WordVectorSerializer.loadTxtVectors(new File("wordvectors.txt"));
 
@@ -19,7 +17,10 @@ public class Word2VecPredictCmd {
         final double cosSim = vec.similarity("男", "女");
         System.out.println(cosSim);
         final double[] wordVector = vec.getWordVector("男");
-        System.out.println(wordVector);
+        for (double val : wordVector) {
+            System.out.println(val);
+        }
+
     }
 
 }
