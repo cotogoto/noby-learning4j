@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.analysis.util.CharArraySet;
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseAnalyzer;
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseTokenizer;
 import org.codelibs.neologd.ipadic.lucene.analysis.ja.JapaneseTokenizer.Mode;
@@ -29,7 +29,8 @@ public class Test {
 
         final UserDictionary userDict = null;
         final Mode mode = JapaneseTokenizer.Mode.NORMAL;
-        final CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
+
+        CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
         final Set <String> stopTags = JapaneseAnalyzer.getDefaultStopTags();
 
         try (JapaneseAnalyzer analyzer = new JapaneseAnalyzer(userDict, mode, stopSet, stopTags);
