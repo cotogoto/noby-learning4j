@@ -1,4 +1,4 @@
-package jp.livlog.noby.word2vec.tokenization.tokenizerfactory;
+package jp.livlog.noby.tokenization.tokenizerfactory;
 
 import java.io.InputStream;
 
@@ -6,7 +6,7 @@ import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizer.Tokenizer;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 
-import jp.livlog.noby.word2vec.tokenization.tokenizer.KuromojiIpadicTokenizer;
+import jp.livlog.noby.tokenization.tokenizer.KuromojiIpadicTokenizer;
 
 public class KuromojiIpadicTokenizerFactory implements TokenizerFactory {
 

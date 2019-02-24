@@ -1,4 +1,4 @@
-package jp.livlog.noby.word2vec.tokenization.tokenizer;
+package jp.livlog.noby.tokenization.tokenizer;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -17,7 +17,6 @@ import org.codelibs.neologd.ipadic.lucene.analysis.ja.dict.UserDictionary;
 import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizer.Tokenizer;
 
-
 public class KuromojiIpadicTokenizer implements Tokenizer {
 
     private static List <String> tokenize(final Reader reader) {
@@ -26,8 +25,8 @@ public class KuromojiIpadicTokenizer implements Tokenizer {
 
         final UserDictionary userDict = null;
         final Mode mode = JapaneseTokenizer.Mode.NORMAL;
-//        final CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
-       CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
+        // final CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
+        final CharArraySet stopSet = JapaneseAnalyzer.getDefaultStopSet();
         final Set <String> stopTags = JapaneseAnalyzer.getDefaultStopTags();
 
         try (JapaneseAnalyzer analyzer = new JapaneseAnalyzer(userDict, mode, stopSet, stopTags);
@@ -55,6 +54,7 @@ public class KuromojiIpadicTokenizer implements Tokenizer {
         return ret;
     }
 
+
     private static List <String> tokenize(final String src) {
 
         return KuromojiIpadicTokenizer.tokenize(new StringReader(src));
@@ -62,9 +62,7 @@ public class KuromojiIpadicTokenizer implements Tokenizer {
 
     private List <String>   tokens = null;
 
-
     private int             index;
-
 
     private TokenPreProcess preProcess;
 

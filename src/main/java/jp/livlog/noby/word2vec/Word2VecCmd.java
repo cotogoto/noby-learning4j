@@ -8,7 +8,7 @@ import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
 import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.EndingPreProcessor;
 
-import jp.livlog.noby.word2vec.tokenization.tokenizerfactory.KuromojiIpadicTokenizerFactory;
+import jp.livlog.noby.tokenization.tokenizerfactory.KuromojiIpadicTokenizerFactory;
 
 public class Word2VecCmd {
 
