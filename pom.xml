@@ -15,10 +15,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <kuromoji.version>6.6.1-20171002</kuromoji.version>
-    <dl4j.version>0.9.1</dl4j.version>
-    <nd4j.version>0.9.1</nd4j.version>
+    <dl4j.version>1.0.0-beta3</dl4j.version>
+    <nd4j.version>1.0.0-beta3</nd4j.version>
     <logback.version>1.2.3</logback.version>
     <slf4j.version>1.7.25</slf4j.version>
+    <twitter4j.version>4.0.7</twitter4j.version>
   </properties>
 
   <repositories>
@@ -80,12 +81,12 @@
     <dependency>
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-core</artifactId>
-      <version>4.0.6</version>
+      <version>${twitter4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-stream</artifactId>
-      <version>4.0.6</version>
+      <version>${twitter4j.version}</version>
     </dependency>
 
   </dependencies>
