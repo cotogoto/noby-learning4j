@@ -14,7 +14,7 @@
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <kuromoji.version>6.6.1-20171002</kuromoji.version>
+    <kuromoji.version>6.5.1</kuromoji.version>
     <dl4j.version>1.0.0-beta3</dl4j.version>
     <nd4j.version>1.0.0-beta3</nd4j.version>
     <logback.version>1.2.3</logback.version>
@@ -22,13 +22,13 @@
     <twitter4j.version>4.0.7</twitter4j.version>
   </properties>
 
-  <repositories>
+<!--   <repositories>
     <repository>
       <id>codelibs.org</id>
       <name>CodeLibs Repository</name>
       <url>http://maven.codelibs.org/</url>
     </repository>
-  </repositories>
+  </repositories> -->
 
   <dependencies>
     <dependency>
@@ -40,9 +40,8 @@
 
     <dependency>
       <groupId>org.codelibs</groupId>
-      <artifactId>lucene-analyzers-kuromoji-ipadic-neologd</artifactId>
+      <artifactId>elasticsearch-analysis-kuromoji-neologd</artifactId>
       <version>${kuromoji.version}</version>
-      <!-- http://maven.codelibs.org/org/codelibs/lucene-analyzers-kuromoji-ipadic-neologd/ -->
     </dependency>
 
     <dependency>

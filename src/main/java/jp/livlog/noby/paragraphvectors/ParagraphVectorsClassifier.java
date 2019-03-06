@@ -11,6 +11,7 @@ import org.deeplearning4j.text.documentiterator.FileLabelAwareIterator;
 import org.deeplearning4j.text.documentiterator.LabelAwareIterator;
 import org.deeplearning4j.text.documentiterator.LabelledDocument;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.EndingPreProcessor;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.primitives.Pair;
@@ -54,17 +55,17 @@ public class ParagraphVectorsClassifier {
         app.checkUnlabeledData();
         /*
                 Your output should be like this:
-        
+
                 Document 'health' falls into the following categories:
                     health: 0.29721372296220205
                     science: 0.011684473733853906
                     finance: -0.14755302887323793
-        
+
                 Document 'finance' falls into the following categories:
                     health: -0.17290237675941766
                     science: -0.09579267574606627
                     finance: 0.4460859189453788
-        
+
                     so,now we know categories for yet unseen documents
          */
     }
@@ -79,7 +80,7 @@ public class ParagraphVectorsClassifier {
                 .addSourceFolder(resource.getFile())
                 .build();
 
-        // this.tokenizerFactory = new DefaultTokenizerFactory();
+        this.tokenizerFactory = new DefaultTokenizerFactory();
         // this.tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
         final EndingPreProcessor preProcessor = new EndingPreProcessor();
         this.tokenizerFactory = new KuromojiIpadicTokenizerFactory();

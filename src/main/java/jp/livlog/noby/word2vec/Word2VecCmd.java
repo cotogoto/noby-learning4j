@@ -14,7 +14,7 @@ public class Word2VecCmd {
 
     public static void main(final String[] args) throws Exception {
 
-        final SentenceIterator iter = new BasicLineIterator(new File("morning.txt"));
+        final SentenceIterator iter = new BasicLineIterator(new File("shisoutofuzoku.txt"));
 
         final EndingPreProcessor preProcessor = new EndingPreProcessor();
         final KuromojiIpadicTokenizerFactory tokenizer = new KuromojiIpadicTokenizerFactory();
