@@ -14,21 +14,15 @@
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <kuromoji.version>6.5.1</kuromoji.version>
+    <kuromoji.version>7.6.0-20190225</kuromoji.version>
     <dl4j.version>1.0.0-beta3</dl4j.version>
     <nd4j.version>1.0.0-beta3</nd4j.version>
     <logback.version>1.2.3</logback.version>
     <slf4j.version>1.7.25</slf4j.version>
     <twitter4j.version>4.0.7</twitter4j.version>
+    <analysis-sudachi.version>1.2.0-SNAPSHOT</analysis-sudachi.version>
   </properties>
 
-<!--   <repositories>
-    <repository>
-      <id>codelibs.org</id>
-      <name>CodeLibs Repository</name>
-      <url>http://maven.codelibs.org/</url>
-    </repository>
-  </repositories> -->
 
   <dependencies>
     <dependency>
@@ -39,14 +33,14 @@
     </dependency>
 
     <dependency>
-      <groupId>org.codelibs</groupId>
-      <artifactId>elasticsearch-analysis-kuromoji-neologd</artifactId>
-      <version>${kuromoji.version}</version>
+      <groupId>org.deeplearning4j</groupId>
+      <artifactId>deeplearning4j-nlp</artifactId>
+      <version>${dl4j.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.deeplearning4j</groupId>
-      <artifactId>deeplearning4j-nlp</artifactId>
+      <artifactId>deeplearning4j-nlp-japanese</artifactId>
       <version>${dl4j.version}</version>
     </dependency>
 
@@ -86,6 +80,12 @@
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-stream</artifactId>
       <version>${twitter4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.worksap.nlp</groupId>
+      <artifactId>analysis-sudachi-elasticsearch6.6</artifactId>
+      <version>${analysis-sudachi.version}</version>
     </dependency>
 
   </dependencies>

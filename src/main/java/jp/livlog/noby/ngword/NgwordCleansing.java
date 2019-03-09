@@ -1,5 +1,6 @@
 package jp.livlog.noby.ngword;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +14,7 @@ import java.text.Normalizer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -99,7 +101,12 @@ public class NgwordCleansing {
                 if (!text.contains("#") && !text.contains("@")) {
                     text = onlyJapanese(text);
                     if (text.contains(lines[1])) {
-                        try (FileWriter fw = new FileWriter("ngwords.txt", true)) {
+                        final File f = new File("./data/" + lines[1]);
+                        if (!f.exists()) {
+                            f.mkdirs();
+                        }
+                        final UUID uuid = UUID.randomUUID();
+                        try (FileWriter fw = new FileWriter("./data/" + lines[1] + "/" + uuid.toString() + ".txt", true)) {
                             fw.write(text + "\n");
                         } catch (final IOException e) {
                             log.error(e.getMessage(), e);

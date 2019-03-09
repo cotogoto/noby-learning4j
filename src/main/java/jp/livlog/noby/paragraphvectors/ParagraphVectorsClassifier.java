@@ -1,17 +1,20 @@
 package jp.livlog.noby.paragraphvectors;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable;
+import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.paragraphvectors.ParagraphVectors;
 import org.deeplearning4j.models.word2vec.VocabWord;
 import org.deeplearning4j.text.documentiterator.FileLabelAwareIterator;
 import org.deeplearning4j.text.documentiterator.LabelAwareIterator;
 import org.deeplearning4j.text.documentiterator.LabelledDocument;
+import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.EndingPreProcessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.JapaneseTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.primitives.Pair;
@@ -20,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import jp.livlog.noby.paragraphvectors.tools.LabelSeeker;
 import jp.livlog.noby.paragraphvectors.tools.MeansBuilder;
-import jp.livlog.noby.tokenization.tokenizerfactory.KuromojiIpadicTokenizerFactory;
 
 /**
  * This is basic example for documents classification done with DL4j ParagraphVectors.
@@ -39,11 +41,11 @@ import jp.livlog.noby.tokenization.tokenizerfactory.KuromojiIpadicTokenizerFacto
  */
 public class ParagraphVectorsClassifier {
 
-    ParagraphVectors            paragraphVectors;
-
-    LabelAwareIterator          iterator;
-
-    TokenizerFactory            tokenizerFactory;
+    // ParagraphVectors paragraphVectors;
+    //
+    // LabelAwareIterator iterator;
+    //
+    // TokenizerFactory tokenizerFactory;
 
     private static final Logger log = LoggerFactory.getLogger(ParagraphVectorsClassifier.class);
 
@@ -51,21 +53,21 @@ public class ParagraphVectorsClassifier {
     public static void main(final String[] args) throws Exception {
 
         final ParagraphVectorsClassifier app = new ParagraphVectorsClassifier();
-        app.makeParagraphVectors();
+        // app.makeParagraphVectors();
         app.checkUnlabeledData();
         /*
                 Your output should be like this:
-
+        
                 Document 'health' falls into the following categories:
                     health: 0.29721372296220205
                     science: 0.011684473733853906
                     finance: -0.14755302887323793
-
+        
                 Document 'finance' falls into the following categories:
                     health: -0.17290237675941766
                     science: -0.09579267574606627
                     finance: 0.4460859189453788
-
+        
                     so,now we know categories for yet unseen documents
          */
     }
@@ -73,18 +75,19 @@ public class ParagraphVectorsClassifier {
 
     void makeParagraphVectors() throws Exception {
 
-        final ClassPathResource resource = new ClassPathResource("paravec/labeled");
+        // final ClassPathResource resource = new ClassPathResource("paravec/labeled");
+        final File folder = new File("paravec/labeled");
 
         // build a iterator for our dataset
-        this.iterator = new FileLabelAwareIterator.Builder()
-                .addSourceFolder(resource.getFile())
+        final LabelAwareIterator iterator = new FileLabelAwareIterator.Builder()
+                .addSourceFolder(folder)
                 .build();
 
-        this.tokenizerFactory = new DefaultTokenizerFactory();
+        // this.tokenizerFactory = new DefaultTokenizerFactory();
         // this.tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
         final EndingPreProcessor preProcessor = new EndingPreProcessor();
-        this.tokenizerFactory = new KuromojiIpadicTokenizerFactory();
-        this.tokenizerFactory.setTokenPreProcessor(token -> {
+        final TokenizerFactory tokenizerFactory = new JapaneseTokenizerFactory();
+        tokenizerFactory.setTokenPreProcessor(token -> {
             token = token.toLowerCase();
             String base = preProcessor.preProcess(token);
             base = base.replaceAll("\\d", "__NUMBER__");
@@ -92,31 +95,53 @@ public class ParagraphVectorsClassifier {
         });
 
         // ParagraphVectors training configuration
-        this.paragraphVectors = new ParagraphVectors.Builder()
+        final ParagraphVectors paragraphVectors = new ParagraphVectors.Builder()
                 .learningRate(0.025)
                 .minLearningRate(0.001)
                 .batchSize(1000)
                 .epochs(20)
-                .iterate(this.iterator)
+                .iterate(iterator)
                 .trainWordVectors(true)
-                .tokenizerFactory(this.tokenizerFactory)
+                .tokenizerFactory(tokenizerFactory)
                 .build();
 
         // Start model training
-        this.paragraphVectors.fit();
+        paragraphVectors.fit();
+        WordVectorSerializer.writeParagraphVectors(paragraphVectors, "ngParagraphVectors.txt");
     }
 
 
     void checkUnlabeledData() throws IOException {
+
+        // this.paragraphVectors= WordVectorSerializer.loadTxtVectors(new File("wordvectors.txt"));
+        final ParagraphVectors paragraphVectors = WordVectorSerializer.readParagraphVectors(new File("ngParagraphVectors.txt"));
+
+        // final EndingPreProcessor preProcessor = new EndingPreProcessor();
+        // final TokenizerFactory tokenizerFactory = new JapaneseTokenizerFactory();
+        // tokenizerFactory.setTokenPreProcessor(token -> {
+        // token = token.toLowerCase();
+        // String base = preProcessor.preProcess(token);
+        // base = base.replaceAll("\\d", "__NUMBER__");
+        // return base;
+        // });
+        final TokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+        tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
 
         /*
         At this point we assume that we have model built and we can check
         which categories our unlabeled document falls into.
         So we'll start loading our unlabeled documents and checking them
         */
-        final ClassPathResource unClassifiedResource = new ClassPathResource("paravec/unlabeled");
+        // final ClassPathResource unClassifiedResource = new ClassPathResource("paravec/unlabeled");
+        final File folder = new File("paravec/unlabeled");
         final FileLabelAwareIterator unClassifiedIterator = new FileLabelAwareIterator.Builder()
-                .addSourceFolder(unClassifiedResource.getFile())
+                .addSourceFolder(folder)
+                .build();
+
+        // build a iterator for our dataset
+        final File folder2 = new File("paravec/labeled");
+        final LabelAwareIterator iterator = new FileLabelAwareIterator.Builder()
+                .addSourceFolder(folder2)
                 .build();
 
         /*
@@ -125,10 +150,10 @@ public class ParagraphVectorsClassifier {
          with different "weight" for each.
         */
         final MeansBuilder meansBuilder = new MeansBuilder(
-                (InMemoryLookupTable <VocabWord>) this.paragraphVectors.getLookupTable(),
-                this.tokenizerFactory);
-        final LabelSeeker seeker = new LabelSeeker(this.iterator.getLabelsSource().getLabels(),
-                (InMemoryLookupTable <VocabWord>) this.paragraphVectors.getLookupTable());
+                (InMemoryLookupTable <VocabWord>) paragraphVectors.getLookupTable(),
+                tokenizerFactory);
+        final LabelSeeker seeker = new LabelSeeker(iterator.getLabelsSource().getLabels(),
+                (InMemoryLookupTable <VocabWord>) paragraphVectors.getLookupTable());
 
         while (unClassifiedIterator.hasNextDocument()) {
             final LabelledDocument document = unClassifiedIterator.nextDocument();

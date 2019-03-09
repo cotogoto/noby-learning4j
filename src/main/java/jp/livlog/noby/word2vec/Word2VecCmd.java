@@ -7,8 +7,8 @@ import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
 import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.EndingPreProcessor;
-
-import jp.livlog.noby.tokenization.tokenizerfactory.KuromojiIpadicTokenizerFactory;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.JapaneseTokenizerFactory;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 
 public class Word2VecCmd {
 
@@ -17,7 +17,7 @@ public class Word2VecCmd {
         final SentenceIterator iter = new BasicLineIterator(new File("shisoutofuzoku.txt"));
 
         final EndingPreProcessor preProcessor = new EndingPreProcessor();
-        final KuromojiIpadicTokenizerFactory tokenizer = new KuromojiIpadicTokenizerFactory();
+        final TokenizerFactory tokenizer = new JapaneseTokenizerFactory();
         tokenizer.setTokenPreProcessor(token -> {
             token = token.toLowerCase();
             String base = preProcessor.preProcess(token);
@@ -27,24 +27,15 @@ public class Word2VecCmd {
         // TokenizerFactory tokenizer = new DefaultTokenizerFactory();
 
         System.out.println("Build model...");
-        final int batchSize = 1000;
-        final int iterations = 5;
-        final int layerSize = 150;
 
         final Word2Vec vec = new Word2Vec.Builder()
-                .batchSize(batchSize)
-                .minWordFrequency(5)
-                .useAdaGrad(false)
-                .layerSize(layerSize)
-                .iterations(iterations)
-                .seed(7485)
+                .minWordFrequency(2)
+                .layerSize(100)
+                .seed(42)
                 .windowSize(5)
-                .learningRate(0.025)
-                .minLearningRate(1e-3)
-                .negativeSample(10)
                 .iterate(iter)
                 .tokenizerFactory(tokenizer)
-                .workers(6)
+                .workers(10)
                 .build();
         vec.fit();
         WordVectorSerializer.writeWordVectors(vec, "wordvectors.txt");
