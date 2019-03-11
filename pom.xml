@@ -20,9 +20,7 @@
     <logback.version>1.2.3</logback.version>
     <slf4j.version>1.7.25</slf4j.version>
     <twitter4j.version>4.0.7</twitter4j.version>
-    <analysis-sudachi.version>1.2.0-SNAPSHOT</analysis-sudachi.version>
   </properties>
-
 
   <dependencies>
     <dependency>
@@ -83,11 +81,17 @@
     </dependency>
 
     <dependency>
-      <groupId>com.worksap.nlp</groupId>
-      <artifactId>analysis-sudachi-elasticsearch6.6</artifactId>
-      <version>${analysis-sudachi.version}</version>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.json</artifactId>
+      <version>1.1.4</version>
     </dependency>
-
+    <dependency>
+      <groupId>com.worksap.nlp</groupId>
+      <artifactId>sudachi</artifactId>
+      <version>0.1.1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/sudachi-0.1.1.jar</systemPath>
+    </dependency>
   </dependencies>
 
   <build>

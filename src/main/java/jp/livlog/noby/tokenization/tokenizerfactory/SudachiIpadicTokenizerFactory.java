@@ -6,9 +6,9 @@ import org.deeplearning4j.text.tokenization.tokenizer.TokenPreProcess;
 import org.deeplearning4j.text.tokenization.tokenizer.Tokenizer;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 
-import jp.livlog.noby.tokenization.tokenizer.KuromojiIpadicTokenizer;
+import jp.livlog.noby.tokenization.tokenizer.SudachiIpadicTokenizer;
 
-public class KuromojiIpadicTokenizerFactory implements TokenizerFactory {
+public class SudachiIpadicTokenizerFactory implements TokenizerFactory {
 
     private TokenPreProcess preProcess;
 
@@ -27,7 +27,7 @@ public class KuromojiIpadicTokenizerFactory implements TokenizerFactory {
             throw new IllegalArgumentException("Unable to proceed; no sentence to tokenize");
         }
 
-        final KuromojiIpadicTokenizer ret = new KuromojiIpadicTokenizer(toTokenize);
+        final SudachiIpadicTokenizer ret = new SudachiIpadicTokenizer(toTokenize);
         ret.setTokenPreProcessor(this.preProcess);
         return ret;
     }
